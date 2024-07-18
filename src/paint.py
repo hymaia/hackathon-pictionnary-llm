@@ -1,5 +1,10 @@
+import base64
+import io
 import tkinter as tk
 from tkinter import ttk
+
+from PIL import Image
+
 
 class PaintApp:
     def __init__(self, root):
@@ -13,6 +18,22 @@ class PaintApp:
         self.setup_events()
         self.prev_x = None
         self.prev_y = None
+
+    def send_image_to_chatgpt(self):
+        # Prendre une capture d'écran du canvas en tant que fichier PostScript
+        ps = self.canvas.postscript(colormode='color')
+
+        # Utiliser PIL pour ouvrir l'image PostScript
+        image = Image.open(io.BytesIO(ps.encode('utf-8')))
+
+        # Convertir l'image en PNG
+        buffer = io.BytesIO()
+        image.save(buffer, format="PNG")
+        encoded_image = base64.b64encode(buffer.getvalue()).decode()
+
+        # Envoyer l'image encodée via la fonction send_image
+        #send_image(encoded_image)
+
 
     def setup_navbar(self):
         self.navbar = tk.Menu(self.root)
@@ -74,6 +95,9 @@ class PaintApp:
 
         self.clear_button = ttk.Button(self.tool_frame, text="Clear Canvas", command=self.clear_canvas)
         self.clear_button.pack(side=tk.TOP, padx=5, pady=5)
+
+        self.send_button = ttk.Button(self.tool_frame, text="Envoyer", command=self.send_image_to_chatgpt)
+        self.send_button.pack(side=tk.TOP, padx=5, pady=5)
 
     def setup_events(self):
         self.canvas.bind("<B1-Motion>", self.draw)
@@ -148,7 +172,7 @@ class PaintApp:
         if items:
             self.canvas.delete(items[-1])
 
-if __name__ == "__main__":
+def main():
     root = tk.Tk()
     root.title("Paint Application")
     app = PaintApp(root)

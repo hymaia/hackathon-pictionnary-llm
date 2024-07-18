@@ -9,6 +9,9 @@ packages = [{ include = "src" }]
 python = "^3.10"
 tk = "^0.1.0"
 langchain = "^0.2.9"
+httpx = "^0.27.0"
+langchain-openai = "^0.1.17"
+python-dotenv = "^1.0.1"
 
 
 [build-system]

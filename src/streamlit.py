@@ -2,6 +2,7 @@ import base64
 from io import BytesIO
 from time import sleep
 
+import json
 import streamlit as st
 from PIL import Image
 from src.game import Game
@@ -10,10 +11,12 @@ from streamlit_drawable_canvas import st_canvas
 
 if 'game' not in st.session_state:
     st.session_state['game'] = Game()
-    st.session_state['data_game'] = DataGame("toto")
+    st.session_state['data_game'] = DataGame()
 
 game = st.session_state['game']
 data_game: DataGame = st.session_state['data_game']
+
+
 
 
 def send_image_to_chatgpt(image_data):
@@ -37,6 +40,7 @@ st.markdown(f'### Le dessin est : **{game.last_prediction}**')
 
 
 # Specify canvas parameters in application
+st.sidebar.text_input(label="Username", key="username")
 drawing_mode = st.sidebar.selectbox(
     "Drawing tool:", ("freedraw", "point", "line", "rect", "circle", "transform")
 )
@@ -62,7 +66,7 @@ canvas_result = st_canvas(
     key="canvas",
 )
 
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 with col1:
     if st.button("Envoyer"):
         data_game.try_to_find(game.current_word())
@@ -86,3 +90,8 @@ with col2:
         game.next_word()
         st.rerun()
 
+with col3:
+    if st.button("END"):
+        js_local = data_game.to_json(st.session_state["username"])
+        with open(f'result_{st.session_state["username"]}.json', 'w') as json_file:
+            json.dump(js_local, json_file, indent=4)

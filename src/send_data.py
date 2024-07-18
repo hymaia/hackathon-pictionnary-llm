@@ -2,11 +2,10 @@ import json
 
 
 class DataGame:
-    def __init__(self, player):
+    def __init__(self):
         self.nb_image_success = 0
         self.nb_image_total = 0
         self.words_played = {}
-        self.player = player
 
     def win_image(self, word):
         self.nb_image_success += 1
@@ -19,13 +18,14 @@ class DataGame:
         else:
             self.words_played[word] = {}
             self.words_played[word]["tries"] = 1
+            self.words_played[word]["win"] = False
 
     def fail_image(self, word):
         self.words_played[word]["win"] = False
 
-    def to_json(self):
+    def to_json(self, player):
         data = {
-            "player": self.player,
+            "player": player,
             "game": 1,  # Assuming game is always 1 for this example, modify as needed
             "results": [
                 {

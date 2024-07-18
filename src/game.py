@@ -5,13 +5,12 @@ WORDS = [
     'voiture',
     'chateau',
     'maison',
-    'chien',
-    'chat',
     'velo',
     'feuille',
     'arbre',
     'soleil',
     'bateau',
+    'pyramide',
 ]
 
 class Game:
@@ -31,13 +30,6 @@ class Game:
     def current_word(self):
         return self.words[self.current_word_idx % len(self.words)]
 
-    def evaluate_paint(self, image_data) -> bool:
-        print("Word to find: ", self.current_word())
-        response = generate_answer(image_data, WORDS)
-        print("Word predicted: ", response)
-        if response.lower() == self.current_word().lower():
-            print("Yeah it's good !")
-            return True
-        else:
-            print("Nope")
-            return False
+    def evaluate_paint(self, image_data) -> str:
+        response = generate_answer(image_data)
+        return response

@@ -7,9 +7,12 @@ import streamlit as st
 from PIL import Image
 from src.chatbot import generate_answer
 from streamlit_drawable_canvas import st_canvas
+from src.game import Game
 
-word_list = ["maison", "voiture", "soleil", "arbre", "fleur", "montagne"]
+if 'game' not in st.session_state:
+    st.session_state['game'] = Game()
 
+game = st.session_state['game']
 
 def send_image_to_chatgpt(image_data):
     # Convertir l'image numpy en image PIL
@@ -23,15 +26,10 @@ def send_image_to_chatgpt(image_data):
     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
 
     # Envoyer l'image encodée via la fonction send_image
-    return generate_answer(img_str)
-
-
-# Champ de texte pour entrer le mot à dessiner
-if 'word_to_draw' not in st.session_state:
-    st.session_state["word_to_draw"] = random.choice(word_list)
+    return game.evaluate_paint(img_str)
 
 # Afficher le mot que le joueur doit dessiner
-st.markdown(f"## Le mot à dessiner est : **{st.session_state['word_to_draw']}**")
+st.markdown(f"## Le mot à dessiner est : **{game.current_word()}**")
 
 
 # Specify canvas parameters in application
@@ -64,9 +62,11 @@ canvas_result = st_canvas(
 if st.button("Envoyer"):
     if canvas_result.image_data is not None:
         word = send_image_to_chatgpt(canvas_result.image_data)
-        if (word.lower() in st.session_state['word_to_draw'].lower()) or (st.session_state['word_to_draw'].lower() in word.lower()):
+        print("WORD -> ", word.lower())
+        print("GAME -> ", game.current_word().lower())
+        if (word.lower() in game.current_word().lower()) or (game.current_word().lower() in word.lower()):
             print("success")
-            st.session_state['word_to_draw'] = random.choice(word_list)
             st.balloons()
             sleep(2)
-            st.experimental_rerun()
+            game.next_word()
+            st.rerun()

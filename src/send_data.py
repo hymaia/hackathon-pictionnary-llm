@@ -15,11 +15,14 @@ class DataGame:
 
     def try_to_find(self, word):
         if word in self.words_played:
-            self.words_played[word]["nb_try"] += 1
-            self.words_played[word]["nb_try"] += 1
+            self.words_played[word]["tries"] += 1
+            if self.words_played[word]["tries"] >= 10:
+                self.fail_image(word)
         else:
-            self.words_played[word]["nb_try"] = 1
-            self.words_played[word]["nb_try"] = 1
+            self.words_played[word]["tries"] = 1
+
+    def fail_image(self, word):
+        self.words_played[word]["win"] = False
 
     def to_json(self):
         data = {
@@ -28,7 +31,7 @@ class DataGame:
             "nb_image_total": self.nb_image_total,
             "results": {
                 word: {
-                    "tries": details["nb_try"],
+                    "tries": details["tries"],
                     "win": details["win"]
                 } for word, details in self.words_played.items()
             }

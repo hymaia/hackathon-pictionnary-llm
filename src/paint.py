@@ -60,7 +60,7 @@ class PaintApp:
         self.selected_tool = "pen"
         self.colors = ["black", "red", "green", "blue", "yellow", "orange", "purple"]
         self.selected_color = self.colors[0]
-        self.brush_sizes = [2, 4, 6, 8]
+        self.brush_sizes = [2, 4, 6, 8, 16, 32, 64]
         self.selected_size = self.brush_sizes[0]
         self.pen_types = ["line", "round", "square", "arrow", "diamond"]
         self.selected_pen_type = self.pen_types[0]
@@ -159,6 +159,12 @@ class PaintApp:
                     y4 = event.y + self.selected_size
                     self.canvas.create_polygon(x1, y1, x2, y2, x3, y3, x4, y4, fill=self.selected_color,
                                                outline=self.selected_color)
+            self.prev_x = event.x
+            self.prev_y = event.y
+        elif self.selected_tool == "eraser":
+            if self.prev_x is not None and self.prev_y is not None:
+                self.canvas.create_line(self.prev_x, self.prev_y, event.x, event.y, fill="white",
+                                        width=self.selected_size, smooth=True)
             self.prev_x = event.x
             self.prev_y = event.y
 

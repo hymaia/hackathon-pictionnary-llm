@@ -94,4 +94,4 @@ with col3:
     if st.button("END"):
         js_local = data_game.to_json(st.session_state["username"])
         with open(f'result_{st.session_state["username"]}.json', 'w') as json_file:
-            json.dump(js_local, json_file, indent=4)
+            json.dump(js_local, json_file)

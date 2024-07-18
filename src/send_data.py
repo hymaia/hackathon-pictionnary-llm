@@ -26,7 +26,6 @@ class DataGame:
     def to_json(self, player):
         data = {
             "player": player,
-            "game": 1,  # Assuming game is always 1 for this example, modify as needed
             "results": [
                 {
                     "word": word,
@@ -35,4 +34,4 @@ class DataGame:
                 } for word, details in self.words_played.items()
             ]
         }
-        return json.dumps(data, indent=4)
+        return data

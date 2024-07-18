@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from PIL import Image
+from src.chatbot import generate_answer
 
 
 class PaintApp:
@@ -32,7 +33,7 @@ class PaintApp:
         encoded_image = base64.b64encode(buffer.getvalue()).decode()
 
         # Envoyer l'image encodée via la fonction send_image
-        #send_image(encoded_image)
+        generate_answer(encoded_image)
 
 
     def setup_navbar(self):

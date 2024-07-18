@@ -1,13 +1,10 @@
-from src.chatbot import ChatBot
-from dotenv import load_dotenv
+import tkinter as tk
+
+from src.paint import PaintApp
+
 
 def main():
-    load_dotenv()
-
-    chatbot = ChatBot()
-
-
-    chatbot.generate_answer()
-
-if __name__ == '__main__':
-    main()
+    root = tk.Tk()
+    root.title("Paint Application")
+    _ = PaintApp(root)
+    root.mainloop()

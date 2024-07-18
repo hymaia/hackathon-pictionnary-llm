@@ -5,7 +5,7 @@ WORDS = [
     'voiture',
     'chateau',
     'maison',
-    'velo',
+    'vélo',
     'feuille',
     'arbre',
     'soleil',

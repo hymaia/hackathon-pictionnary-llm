@@ -5,10 +5,11 @@ from tkinter import ttk
 
 from PIL import Image
 from src.chatbot import generate_answer
+from src.game import Game
 
 
 class PaintApp:
-    def __init__(self, root):
+    def __init__(self, root, game):
         self.root = root
         self.canvas_width = 800
         self.canvas_height = 600
@@ -19,6 +20,8 @@ class PaintApp:
         self.setup_events()
         self.prev_x = None
         self.prev_y = None
+
+        self.game = game
 
     def send_image_to_chatgpt(self):
         # Prendre une capture d'écran du canvas en tant que fichier PostScript
@@ -33,7 +36,8 @@ class PaintApp:
         encoded_image = base64.b64encode(buffer.getvalue()).decode()
 
         # Envoyer l'image encodée via la fonction send_image
-        generate_answer(encoded_image)
+        # generate_answer(encoded_image)
+        self.game.evaluate_paint(encoded_image)
 
 
     def setup_navbar(self):

@@ -33,6 +33,8 @@ def send_image_to_chatgpt(image_data):
 # Afficher le mot que le joueur doit dessiner
 st.markdown(f"## Le mot à dessiner est : **{game.current_word()}**")
 
+st.markdown(f'### Le dessin est : **{game.last_prediction}**')
+
 
 # Specify canvas parameters in application
 drawing_mode = st.sidebar.selectbox(
@@ -73,16 +75,12 @@ with col1:
                 st.balloons()
                 sleep(2)
                 game.next_word()
-                st.rerun()
             elif data_game.words_played[game.current_word()]["tries"] >= 10:
                 data_game.fail_image(game.current_word())
                 st.snow()
                 sleep(2)
                 game.next_word()
-                st.rerun()
-
-
-
+            st.rerun()
 with col2:
     if st.button("Passer"):
         game.next_word()

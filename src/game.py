@@ -17,6 +17,7 @@ class Game:
 
     def __init__(self):
         self.new_game()
+        self.last_prediction = ''
 
     def new_game(self):
         self.words = WORDS
@@ -32,4 +33,5 @@ class Game:
 
     def evaluate_paint(self, image_data) -> str:
         response = generate_answer(image_data)
+        self.last_prediction = response
         return response

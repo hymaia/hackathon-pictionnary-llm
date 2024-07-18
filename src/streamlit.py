@@ -58,15 +58,21 @@ canvas_result = st_canvas(
     key="canvas",
 )
 
+col1, col2 = st.columns(2)
+with col1:
+    if st.button("Envoyer"):
+        if canvas_result.image_data is not None:
+            word = send_image_to_chatgpt(canvas_result.image_data)
+            print("WORD -> ", word.lower())
+            print("GAME -> ", game.current_word().lower())
+            if (word.lower() in game.current_word().lower()) or (game.current_word().lower() in word.lower()):
+                print("success")
+                st.balloons()
+                sleep(2)
+                game.next_word()
+                st.rerun()
+with col2:
+    if st.button("Passer"):
+        game.next_word()
+        st.rerun()
 
-if st.button("Envoyer"):
-    if canvas_result.image_data is not None:
-        word = send_image_to_chatgpt(canvas_result.image_data)
-        print("WORD -> ", word.lower())
-        print("GAME -> ", game.current_word().lower())
-        if (word.lower() in game.current_word().lower()) or (game.current_word().lower() in word.lower()):
-            print("success")
-            st.balloons()
-            sleep(2)
-            game.next_word()
-            st.rerun()

@@ -26,6 +26,7 @@ class Game:
         self.current_word_idx = 0
 
     def next_word(self):
+        self.last_prediction = ''
         self.current_word_idx = self.current_word_idx + 1
 
     def current_word(self):

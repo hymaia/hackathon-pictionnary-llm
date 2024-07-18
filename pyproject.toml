@@ -3,11 +3,12 @@ name = "hackathon-pictionnary-llm"
 version = "0.1.0"
 description = ""
 authors = ["hymaia"]
-readme = "README.md"
+packages = [{ include = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 tk = "^0.1.0"
+langchain = "^0.2.9"
 
 
 [build-system]

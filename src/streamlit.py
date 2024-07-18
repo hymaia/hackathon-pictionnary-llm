@@ -1,18 +1,20 @@
 import base64
-import random
 from io import BytesIO
 from time import sleep
 
 import streamlit as st
 from PIL import Image
-from src.chatbot import generate_answer
-from streamlit_drawable_canvas import st_canvas
 from src.game import Game
+from src.send_data import DataGame
+from streamlit_drawable_canvas import st_canvas
 
 if 'game' not in st.session_state:
     st.session_state['game'] = Game()
+    st.session_state['data_game'] = DataGame("toto")
 
 game = st.session_state['game']
+data_game: DataGame = st.session_state['data_game']
+
 
 def send_image_to_chatgpt(image_data):
     # Convertir l'image numpy en image PIL
@@ -61,16 +63,26 @@ canvas_result = st_canvas(
 col1, col2 = st.columns(2)
 with col1:
     if st.button("Envoyer"):
+        data_game.try_to_find(game.current_word())
         if canvas_result.image_data is not None:
             word = send_image_to_chatgpt(canvas_result.image_data)
             print("WORD -> ", word.lower())
             print("GAME -> ", game.current_word().lower())
             if (word.lower() in game.current_word().lower()) or (game.current_word().lower() in word.lower()):
-                print("success")
+                data_game.win_image(game.current_word())
                 st.balloons()
                 sleep(2)
                 game.next_word()
                 st.rerun()
+            elif data_game.words_played[game.current_word()]["tries"] >= 10:
+                data_game.fail_image(game.current_word())
+                st.snow()
+                sleep(2)
+                game.next_word()
+                st.rerun()
+
+
+
 with col2:
     if st.button("Passer"):
         game.next_word()
